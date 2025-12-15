@@ -2,10 +2,22 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const CreateMeal = () => {
   const { user } = useAuth();
   const { register, handleSubmit, reset } = useForm();
+  const axiosSecure = useAxiosSecure();
+
+  const { data: dbUser = {} } = useQuery({
+    queryKey: ["dbUser", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/${user.email}`);
+      return res.data;
+    },
+  });
 
   const onSubmit = async (data) => {
     try {
@@ -18,30 +30,23 @@ const CreateMeal = () => {
         ingredients: data.ingredients.split(","),
         estimatedDeliveryTime: data.estimatedDeliveryTime,
         chefExperience: data.chefExperience,
-        chefId: user?.uid || "",
-        userEmail: user?.email || "",
+        chefId: dbUser?.chefId || "", // use chefId from db
+        userEmail: dbUser?.email || "",
         createdAt: new Date().toISOString(),
       };
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/meals`,
-        mealData,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("access-token")}`,
-          },
-        }
-      );
+      const res = await axiosSecure.post("/meals", mealData);
 
       if (res.data.insertedId) {
         toast.success("Meal Created Successfully!");
         reset();
       }
     } catch (err) {
-      console.log(err);
-      toast.error("Failed to create meal");
+      console.log(err.response?.data || err);
+      toast.error(err.response?.data?.message || "Failed to create meal");
     }
   };
+
   return (
     <div className="w-full max-w-4xl mx-auto p-6 md:p-10 bg-white rounded-2xl shadow-2xl border border-gray-100">
       <h2 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
@@ -131,6 +136,7 @@ const CreateMeal = () => {
         <div className="md:col-span-2 mt-4">
           <button
             type="submit"
+            disabled={user.status === "fraud"}
             className="w-full py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-600 shadow-lg transition duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-green-300"
           >
             Create Meal

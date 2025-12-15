@@ -146,6 +146,7 @@ const MealDetails = () => {
             {/* Order button */}
             <Link
               to={`/order/${meal._id}`}
+              disabled={user.status === "fraud"}
               className="inline-block mt-4 bg-red-600 text-white rounded-full hover:bg-red-800 font-semibold px-8 py-3  transition"
             >
               Order Now
@@ -201,7 +202,7 @@ const MealDetails = () => {
               type="number"
               min="1"
               max="5"
-              value={rating}
+              value={meal.rating}
               onChange={(e) => setRating(e.target.value)}
               className="w-full border p-2 rounded mb-4"
             />

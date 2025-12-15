@@ -10,6 +10,7 @@ const Order = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [meal, setMeal] = useState({});
+  const [chefInfo, setChefInfo] = useState(null);
   const navigate = useNavigate();
   const {
     register,
@@ -26,21 +27,41 @@ const Order = () => {
   const quantity = watch("quantity");
 
   useEffect(() => {
-    axiosSecure.get(`/meals/${id}`).then((res) => {
-      setMeal(res.data);
-    });
+    if (meal?.chefEmail) {
+      axiosSecure.get(`/users/${meal.chefEmail}`).then((res) => {
+        setChefInfo(res.data);
+      });
+    }
+  }, [meal?.chefEmail, axiosSecure]);
+
+  // fetch meal details by id
+  useEffect(() => {
+    if (!id) return;
+    let canceled = false;
+    axiosSecure
+      .get(`/meals/${id}`)
+      .then((res) => {
+        const fetched = res.data?.meal || res.data || {};
+        if (!canceled) setMeal(fetched);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch meal", err);
+      });
+    return () => {
+      canceled = true;
+    };
   }, [id, axiosSecure]);
 
   const onSubmit = async (data) => {
     const orderData = {
       userEmail: user?.email,
       userName: user?.displayName,
-      mealId: meal?.id,
+
       mealName: meal?.title,
       mealImage: meal?.image,
-      chefName: meal?.chefName,
+      chefName: meal.chefName,
       chefEmail: meal?.chefEmail,
-      chefId: meal?.chefId,
+      chefId: chefInfo?.chefId,
       price: meal?.price,
       quantity: data.quantity,
       totalPrice: meal?.price * data.quantity,
@@ -90,7 +111,9 @@ const Order = () => {
           <div className="flex-1 space-y-3">
             <h3 className="text-2xl font-semibold">{meal?.title}</h3>
             <p className="text-gray-600">{meal?.description}</p>
-            <p className="text-lg font-medium">Price: ${meal?.price}</p>
+            <p className="text-lg font-medium">
+              Price: ${Number(meal?.price || 0).toFixed(2)}
+            </p>
             <p className="text-sm text-gray-500">Chef: {meal?.chefName}</p>
           </div>
         </div>
@@ -143,7 +166,8 @@ const Order = () => {
 
           {/* Total */}
           <div className="text-xl font-semibold">
-            Total: ${meal?.price * quantity}
+            Total: $
+            {((Number(meal?.price) || 0) * (Number(quantity) || 0)).toFixed(2)}
           </div>
 
           <button className="btn bg-red-600 text-white hover:bg-red-700 w-full text-lg">

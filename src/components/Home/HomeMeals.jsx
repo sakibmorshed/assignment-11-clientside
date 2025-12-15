@@ -27,7 +27,7 @@ const HomeMeals = () => {
       </div>
       <div>
         {meals && meals.length > 0 ? (
-          <div className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 justify-around">
+          <div className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 gap-y-10 justify-around">
             {meals.slice(0, 6).map((meal) => (
               <Card key={meal._id} meal={meal} />
             ))}

@@ -71,8 +71,7 @@ const ManageOrders = () => {
                 {order.userEmail}
               </p>
               <p>
-                <span className="font-semibold">Address:</span>{" "}
-                {order.userAddress}
+                <span className="font-semibold">Address:</span> {order.address}
               </p>
               <p>
                 <span className="font-semibold">Payment:</span>{" "}

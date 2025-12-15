@@ -10,7 +10,7 @@ import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import Profile from "../pages/Dashboard/Common/Profile";
 import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
-import MyInventory from "../pages/Dashboard/Seller/MyInventory";
+
 import ManageOrders from "../pages/Dashboard/Seller/ManageOrders";
 import MyOrders from "../pages/Dashboard/Customer/MyOrders";
 import { createBrowserRouter } from "react-router";
@@ -24,6 +24,9 @@ import Order from "../pages/Order/Order";
 
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
+import ManageRequests from "../pages/Dashboard/Admin/ManageRequests";
+import axios from "axios";
+import PaymentSuccess from "../pages/PaymentPage/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -62,8 +65,20 @@ export const router = createBrowserRouter([
             <PaymentPage />
           </PrivateRoute>
         ),
-        loader: ({ params }) =>
-          useAxiosSecure.length(`/orders/${params.id}`).then((res) => res.data),
+        loader: async ({ params }) => {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/order/${params.id}`
+          );
+          return res.data;
+        },
+      },
+      {
+        path: "/paymentSuccess/:id",
+        element: (
+          <PrivateRoute>
+            <PaymentSuccess />
+          </PrivateRoute>
+        ),
       },
     ],
   },
@@ -94,10 +109,10 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-inventory",
+        path: "manage-requests",
         element: (
           <PrivateRoute>
-            <MyInventory />
+            <ManageRequests />
           </PrivateRoute>
         ),
       },
@@ -141,9 +156,14 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       {
         path: "manage-orders",
-        element: <ManageOrders />,
+        element: (
+          <PrivateRoute>
+            <ManageOrders />
+          </PrivateRoute>
+        ),
       },
     ],
   },

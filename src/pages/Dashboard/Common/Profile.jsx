@@ -1,54 +1,101 @@
+import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import coverImg from "../../../assets/images/cover.jpg";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const Profile = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [dbUser, setDbUser] = useState();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user?.email) {
+      axiosSecure.get(`/users/${user.email}`).then((res) => {
+        setDbUser(res.data);
+      });
+    }
+  }, [user, axiosSecure]);
+
+  const handleRequest = async (type) => {
+    setLoading(true);
+
+    const requestData = {
+      userId: dbUser._id,
+      userEmail: dbUser.email,
+      userName: dbUser.name,
+      requestType: type,
+      requestStatus: "pending",
+      requestTime: new Date(),
+    };
+
+    try {
+      await axiosSecure.post("/requests", requestData);
+      toast.success(`Request sent to become ${type}`);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Already requested");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!dbUser) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="bg-white shadow-lg rounded-2xl md:w-4/5 lg:w-3/5">
-        <img
-          alt="cover photo"
-          src={coverImg}
-          className="w-full mb-4 rounded-t-lg h-56"
-        />
-        <div className="flex flex-col items-center justify-center p-4 -mt-16">
-          <a href="#" className="relative block">
-            <img
-              alt="profile"
-              src={user?.photoURL}
-              className="mx-auto object-cover rounded-full h-24 w-24  border-2 border-white "
-            />
-          </a>
+    <div className="max-w-3xl mx-auto p-6">
+      <div className="card bg-base-100 shadow-xl">
+        <div className="card-body">
+          <div className="flex flex-col items-center">
+            <img src={dbUser.photo} className="w-28 h-28 rounded-full border" />
+            <h2 className="text-2xl font-bold mt-2">{dbUser.name}</h2>
+            <p className="text-gray-500">{dbUser.email}</p>
+          </div>
 
-          <p className="p-2 px-4 text-xs text-white bg-lime-500 rounded-full">
-            Customer
-          </p>
-          <p className="mt-2 text-xl font-medium text-gray-800 ">
-            User Id: {user?.uid}
-          </p>
-          <div className="w-full p-2 mt-4 rounded-lg">
-            <div className="flex flex-wrap items-center justify-between text-sm text-gray-600 ">
-              <p className="flex flex-col">
-                Name
-                <span className="font-bold text-gray-600 ">
-                  {user?.displayName}
-                </span>
-              </p>
-              <p className="flex flex-col">
-                Email
-                <span className="font-bold text-gray-600 ">{user?.email}</span>
-              </p>
+          <div className="divider"></div>
 
-              <div>
-                <button className="bg-lime-500  px-10 py-1 rounded-lg text-white cursor-pointer hover:bg-lime-800 block mb-1">
-                  Update Profile
-                </button>
-                <button className="bg-lime-500 px-7 py-1 rounded-lg text-white cursor-pointer hover:bg-lime-800">
-                  Change Password
-                </button>
-              </div>
-            </div>
+          <div className="space-y-2">
+            <p>
+              <b>Role:</b> {dbUser.role}
+            </p>
+            <p>
+              <b>Status:</b> {dbUser.status}
+            </p>
+            <p>
+              <b>Address:</b> {dbUser.address || "Not added"}
+            </p>
+
+            {dbUser.role === "chef" && (
+              <p>
+                <b>Chef ID:</b> {dbUser.chefId}
+              </p>
+            )}
+          </div>
+
+          <div className="divider"></div>
+
+          <div className="flex gap-4 justify-center">
+            {dbUser.role === "user" && (
+              <button
+                disabled={loading}
+                onClick={() => handleRequest("chef")}
+                className="btn bg-red-600 hover:bg-red-800 text-white rounded-lg"
+              >
+                Be a Chef
+              </button>
+            )}
+
+            {(dbUser.role === "user" || dbUser.role === "chef") && (
+              <button
+                disabled={loading}
+                onClick={() => handleRequest("admin")}
+                className="btn bg-red-600 hover:bg-red-800 text-white rounded-lg"
+              >
+                Be an Admin
+              </button>
+            )}
           </div>
         </div>
       </div>

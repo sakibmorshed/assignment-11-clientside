@@ -53,6 +53,21 @@ const AuthProvider = ({ children }) => {
           photo: currentUser.photoURL,
         };
         await axios.post(`${import.meta.env.VITE_API_URL}/users`, userInfo);
+        // fetch DB user to get role and other metadata, then merge into context user
+        try {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/users/${currentUser.email}`
+          );
+          const dbUser = res.data || {};
+          // merge role and any other fields into the user object in context
+          setUser((prev) => ({
+            ...(prev || {}),
+            role: dbUser.role,
+            chefId: dbUser.chefId,
+          }));
+        } catch (err) {
+          console.error("Failed to fetch DB user", err);
+        }
       }
     });
     return () => {
