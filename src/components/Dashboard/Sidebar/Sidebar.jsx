@@ -72,13 +72,6 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between flex-1 mt-6">
             {/*  Menu Items */}
             <nav>
-              {/* Common Menu */}
-              <MenuItem
-                icon={BsGraphUp}
-                label="Statistics"
-                address="/dashboard"
-              />
-              {/* Role-Based Menu */}
               {/* Role-Based Menu */}
               {user?.role === "user" && <CustomerMenu />}
 

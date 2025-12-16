@@ -8,7 +8,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import Profile from "../pages/Dashboard/Common/Profile";
-import Statistics from "../pages/Dashboard/Common/Statistics";
+
 import MainLayout from "../layouts/MainLayout";
 
 import ManageOrders from "../pages/Dashboard/Seller/ManageOrders";
@@ -28,6 +28,7 @@ import axios from "axios";
 import PaymentSuccess from "../pages/PaymentPage/PaymentSuccess";
 import MyMeals from "../pages/Dashboard/Seller/MyMeals";
 import UpdateMeal from "../pages/Dashboard/Seller/UpdateMeal";
+import Statistics from "../pages/Dashboard/Admin/Statistics";
 
 export const router = createBrowserRouter([
   {
@@ -94,7 +95,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        index: true,
+        path: "adminStats",
         element: (
           <PrivateRoute>
             <Statistics />

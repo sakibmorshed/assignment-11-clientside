@@ -9,13 +9,19 @@ import { motion } from "framer-motion";
 
 const Meals = () => {
   const [sortOrder, setSortOrder] = useState("none");
-  const { data: meals = [], isLoading } = useQuery({
+  const [page, setPage] = useState(1);
+  const { data = {}, isLoading } = useQuery({
     queryKey: ["meals"],
     queryFn: async () => {
-      const result = await axios(`${import.meta.env.VITE_API_URL}/meals`);
+      const result = await axios(
+        `${import.meta.env.VITE_API_URL}/meals?page=${page}`
+      );
       return result.data;
     },
   });
+
+  const meals = data.meals || [];
+  const totalPages = data.totalPages || 1;
 
   console.log(meals);
   if (isLoading) return <LoadingSpinner />;
@@ -82,6 +88,34 @@ const Meals = () => {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="flex justify-center gap-2 mt-10 mb-10">
+        <button
+          className="btn btn-sm"
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
+          Prev
+        </button>
+
+        {[...Array(totalPages).keys()].map((num) => (
+          <button
+            key={num}
+            onClick={() => setPage(num + 1)}
+            className={`btn btn-sm ${page === num + 1 ? "btn-primary" : ""}`}
+          >
+            {num + 1}
+          </button>
+        ))}
+
+        <button
+          className="btn btn-sm"
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </Container>
   );

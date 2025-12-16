@@ -1,5 +1,6 @@
 import { FaUserCheck, FaUserCog } from "react-icons/fa";
 import MenuItem from "./MenuItem";
+import { BsGraphUp } from "react-icons/bs";
 
 const AdminMenu = () => {
   return (
@@ -10,6 +11,7 @@ const AdminMenu = () => {
         label="Manage Requests"
         address="manage-requests"
       />
+      <MenuItem icon={BsGraphUp} label="Statistics" address="adminStats" />
     </>
   );
 };

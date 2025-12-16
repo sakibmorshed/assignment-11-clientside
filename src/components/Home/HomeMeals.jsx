@@ -7,13 +7,15 @@ import { motion } from "framer-motion";
 import { cardUp } from "../CardAnimation/CardAnimation";
 
 const HomeMeals = () => {
-  const { data: meals = [], isLoading } = useQuery({
+  const { data = {}, isLoading } = useQuery({
     queryKey: ["meals"],
     queryFn: async () => {
-      const result = await axios(`${import.meta.env.VITE_API_URL}/meals`);
+      const result = await axios.get(`${import.meta.env.VITE_API_URL}/meals`);
       return result.data;
     },
   });
+
+  const meals = data.meals || [];
 
   console.log(meals);
   if (isLoading) return <LoadingSpinner />;
