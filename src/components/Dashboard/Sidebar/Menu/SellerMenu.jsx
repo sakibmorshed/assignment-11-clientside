@@ -1,5 +1,5 @@
 import { FaPlateWheat } from "react-icons/fa6";
-import { MdHomeWork, MdOutlineManageHistory } from "react-icons/md";
+import { MdHomeWork, MdOutlineManageHistory, MdSetMeal } from "react-icons/md";
 import MenuItem from "./MenuItem";
 const SellerMenu = () => {
   return (
@@ -11,6 +11,7 @@ const SellerMenu = () => {
         label="Manage Orders"
         address="manage-orders"
       />
+      <MenuItem icon={MdSetMeal} label="My Meals" address="myMeals" />
     </>
   );
 };

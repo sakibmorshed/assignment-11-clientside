@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import Card from "../../components/Home/Card";
+import { cardUp } from "../../components/CardAnimation/CardAnimation";
+import { motion } from "framer-motion";
 
 const Meals = () => {
   const [sortOrder, setSortOrder] = useState("none");
@@ -28,47 +30,60 @@ const Meals = () => {
     }
   };
   return (
-    <div>
-      <Container>
-        <div className="mt-30">
-          <h2 className="text-3xl text-center font-semibold text-red-600">
+    <Container>
+      <div className="mt-30">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
+        >
+          <h2 className="text-3xl font-semibold text-red-600">
             The Meals Board
           </h2>
-          <p className="text-xl text-gray-500 truncate my-4 text-center">
+          <p className="text-xl text-gray-500 my-4">
             Quick access to your next favorite dish. View all chef-recommended
             specials and order today.
           </p>
+        </motion.div>
 
-          <span className="font-semibold text-2xl text-red-600">
-            Sorting :{" "}
-          </span>
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
+          <span className="font-semibold text-2xl text-red-600">Sorting :</span>
+
           <label className="form-control w-full max-w-xs">
             <select
               className="select select-bordered text-gray-500 border-black"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
-              <option value="none" className=" text-gray-500">
-                Sort by price
-              </option>
-              <option value="price-asc" className=" text-gray-500">
-                Low-to-High
-              </option>
-              <option value="price-dsc" className=" text-gray-500">
-                High-to-Low
-              </option>
+              <option value="none">Sort by price</option>
+              <option value="price-asc">Low-to-High</option>
+              <option value="price-dsc">High-to-Low</option>
             </select>
           </label>
-          {meals && meals.length > 0 ? (
-            <div className="grid grid-cols-3 gap-4 mt-10">
-              {sortedItem().map((meal) => (
-                <Card key={meal._id} meal={meal} />
-              ))}
-            </div>
-          ) : null}
         </div>
-      </Container>
-    </div>
+
+        {sortedItem().length > 0 && (
+          <div
+            key={sortOrder}
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10"
+          >
+            {sortedItem().map((meal) => (
+              <motion.div
+                key={meal._id}
+                variants={cardUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+              >
+                <Card meal={meal} />
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </Container>
   );
 };
 

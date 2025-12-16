@@ -22,11 +22,12 @@ import MyReviews from "../pages/Dashboard/Customer/MyReviews";
 import Favorites from "../pages/Dashboard/Customer/Favorites";
 import Order from "../pages/Order/Order";
 
-import useAxiosSecure from "../hooks/useAxiosSecure";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import ManageRequests from "../pages/Dashboard/Admin/ManageRequests";
 import axios from "axios";
 import PaymentSuccess from "../pages/PaymentPage/PaymentSuccess";
+import MyMeals from "../pages/Dashboard/Seller/MyMeals";
+import UpdateMeal from "../pages/Dashboard/Seller/UpdateMeal";
 
 export const router = createBrowserRouter([
   {
@@ -164,6 +165,29 @@ export const router = createBrowserRouter([
             <ManageOrders />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "myMeals",
+        element: (
+          <PrivateRoute>
+            <MyMeals />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "updateMeal/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateMeal />
+          </PrivateRoute>
+        ),
+        loader: async ({ params }) => {
+          const axiosPublic = axios.create({
+            baseURL: import.meta.env.VITE_API_URL,
+          });
+          const res = await axiosPublic.get(`/meals/${params.id}`);
+          return res.data;
+        },
       },
     ],
   },
