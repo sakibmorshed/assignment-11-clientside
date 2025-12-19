@@ -11,13 +11,14 @@ const Meals = () => {
   const [sortOrder, setSortOrder] = useState("none");
   const [page, setPage] = useState(1);
   const { data = {}, isLoading } = useQuery({
-    queryKey: ["meals"],
+    queryKey: ["meals", page],
     queryFn: async () => {
       const result = await axios(
         `${import.meta.env.VITE_API_URL}/meals?page=${page}`
       );
       return result.data;
     },
+    keepPreviousData: true,
   });
 
   const meals = data.meals || [];
