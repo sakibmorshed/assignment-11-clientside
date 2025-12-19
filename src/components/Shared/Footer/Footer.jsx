@@ -1,5 +1,3 @@
-// src/components/Footer.jsx
-
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import {
   TbBrandFacebook,
@@ -11,7 +9,6 @@ export default function Footer() {
   return (
     <footer className="bg-black text-gray-300 py-12 border-t border-gray-900">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Contact Details */}
         <div>
           <h2 className="text-xl font-bold text-white mb-5">Contact Us</h2>
           <div className="space-y-3 text-sm">
@@ -30,7 +27,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Working Hours */}
         <div>
           <h2 className="text-xl font-bold text-white mb-5">Working Hours</h2>
           <div className="space-y-4 text-sm">
@@ -51,7 +47,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Social Media Links */}
         <div className="text-center">
           <h2 className="text-xl font-bold text-white mb-5">Follow Us</h2>
           <div className="flex gap-4 justify-center">
@@ -77,7 +72,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Copyright */}
       <div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
         © 2025 LocalChef. All rights reserved.
       </div>

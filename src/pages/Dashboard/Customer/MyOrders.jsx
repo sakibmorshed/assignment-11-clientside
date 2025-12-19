@@ -30,7 +30,6 @@ const MyOrders = () => {
               key={order._id}
               className="card bg-base-100 shadow-lg hover:shadow-2xl transition-all duration-300 border border-base-300 rounded-2xl overflow-hidden group"
             >
-              {/* Card Header - Status Badge */}
               <div className="px-6 pt-5 flex justify-between items-start">
                 <div
                   className={`badge badge-lg font-medium ${

@@ -39,7 +39,6 @@ const AuthProvider = ({ children }) => {
     });
   };
 
-  // onAuthStateChange
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       console.log("CurrentUser-->", currentUser?.email);
@@ -53,13 +52,13 @@ const AuthProvider = ({ children }) => {
           photo: currentUser.photoURL,
         };
         await axios.post(`${import.meta.env.VITE_API_URL}/users`, userInfo);
-        // fetch DB user to get role and other metadata, then merge into context user
+
         try {
           const res = await axios.get(
             `${import.meta.env.VITE_API_URL}/users/${currentUser.email}`
           );
           const dbUser = res.data || {};
-          // merge role and any other fields into the user object in context
+
           setUser((prev) => ({
             ...(prev || {}),
             role: dbUser.role,

@@ -32,8 +32,6 @@ const HomeReview = () => {
             <>
               <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-200 md:w-[400px]">
                 <div className="card-body p-6">
-                  {/* Reviewer Info */}
-
                   <div className="flex items-center gap-4 mb-4">
                     <div className="avatar">
                       <div className="w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -49,7 +47,6 @@ const HomeReview = () => {
                     </div>
                   </div>
 
-                  {/* Rating Stars */}
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
                       <FaStar
@@ -64,13 +61,11 @@ const HomeReview = () => {
                     </span>
                   </div>
 
-                  {/* Comment */}
                   <p className="text-base-600 leading-relaxed italic">
                     "{r.comment}"
                   </p>
                 </div>
 
-                {/* Optional subtle quote decoration */}
                 <div className="absolute top-4 right-6 opacity-10 text-8xl select-none pointer-events-none">
                   ❝
                 </div>

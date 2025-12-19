@@ -17,7 +17,6 @@ const MealDetails = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
 
-  //fetch meals
   const { data: meal = {}, isLoading } = useQuery({
     queryKey: ["meal", id],
     queryFn: async () => {
@@ -25,8 +24,6 @@ const MealDetails = () => {
       return result.data;
     },
   });
-
-  //fetch reviews
 
   const { data: reviews = [], refetch } = useQuery({
     queryKey: ["reviews", id],
@@ -60,8 +57,6 @@ const MealDetails = () => {
 
     refetch();
   };
-
-  //Add to favorite list
 
   const handleFavorite = async () => {
     if (!user) {

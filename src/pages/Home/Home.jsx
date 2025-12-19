@@ -11,8 +11,6 @@ const Home = () => {
 
       <VideoShowcase />
       <HomeReview />
-
-      {/* More components */}
     </div>
   );
 };

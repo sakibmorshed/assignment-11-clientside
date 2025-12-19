@@ -1,5 +1,3 @@
-// src/components/HeroCarousel.jsx   ← পুরো ফাইলটা এটা দিয়ে রিপ্লেস করো
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,7 +6,6 @@ const images = ["/hero.jpeg", "/hero2.jpeg", "/hero3.jpg"];
 export default function HeroCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto slide
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -16,7 +13,6 @@ export default function HeroCarousel() {
     return () => clearInterval(interval);
   }, []);
 
-  // Preload all images instantly
   useEffect(() => {
     images.forEach((src) => {
       const img = new Image();
@@ -26,7 +22,6 @@ export default function HeroCarousel() {
 
   return (
     <section className="relative h-screen overflow-hidden">
-      {/* All images stacked on top of each other */}
       <div className="absolute inset-0">
         {images.map((src, index) => (
           <motion.div
@@ -38,7 +33,7 @@ export default function HeroCarousel() {
             }}
             transition={{
               duration: 1.4,
-              ease: [0.6, 0.01, 0.05, 0.95], // super smooth curve
+              ease: [0.6, 0.01, 0.05, 0.95],
             }}
           >
             <img
@@ -53,13 +48,11 @@ export default function HeroCarousel() {
         ))}
       </div>
 
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50 pointer-events-none" />
 
-      {/* Text */}
       <div className="relative h-full flex items-center justify-center text-center px-6">
         <motion.h1
-          key={currentIndex} // text ও সামান্য refresh হয়
+          key={currentIndex}
           initial={{ y: 60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 1 }}
@@ -71,7 +64,6 @@ export default function HeroCarousel() {
         </motion.h1>
       </div>
 
-      {/* Dots */}
       <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {images.map((_, i) => (
           <button

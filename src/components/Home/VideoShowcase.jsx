@@ -13,7 +13,6 @@ const VideoShowcase = () => {
   return (
     <section className="bg-gray-100 py-20 px-4 overflow-hidden mt-10">
       <div className="max-w-7xl mx-auto">
-        {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -29,9 +28,7 @@ const VideoShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Video Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Card 1 */}
           <motion.div
             variants={cardVariants}
             initial="hidden"
@@ -59,7 +56,6 @@ const VideoShowcase = () => {
             </div>
           </motion.div>
 
-          {/* Card 2 */}
           <motion.div
             variants={cardVariants}
             initial="hidden"

@@ -30,7 +30,7 @@ const CreateMeal = () => {
         ingredients: data.ingredients.split(","),
         estimatedDeliveryTime: data.estimatedDeliveryTime,
         chefExperience: data.chefExperience,
-        chefId: dbUser?.chefId || "", // use chefId from db
+        chefId: dbUser?.chefId || "",
         userEmail: dbUser?.email || "",
         createdAt: new Date().toISOString(),
       };

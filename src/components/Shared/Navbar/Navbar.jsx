@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router";
@@ -117,6 +116,9 @@ export default function Navbar() {
             </Link>
             <Link to="/dashboard" className="block text-white text-xl">
               Dashboard
+            </Link>
+            <Link to="/login" className="block text-white text-xl">
+              Login
             </Link>
 
             <Link to="/meals">
