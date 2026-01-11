@@ -30,6 +30,8 @@ import MyMeals from "../pages/Dashboard/Seller/MyMeals";
 import UpdateMeal from "../pages/Dashboard/Seller/UpdateMeal";
 import Statistics from "../pages/Dashboard/Admin/Statistics";
 import Welcome from "../pages/Dashboard/Common/Welcome";
+import About from "../pages/About/About";
+import Contact from "../pages/Contact/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -43,15 +45,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/meal/:id",
-        element: (
-          <PrivateRoute>
-            <MealDetails />
-          </PrivateRoute>
-        ),
+        element: <MealDetails />,
       },
       {
         path: "/meals",
         Component: Meals,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/order/:id",

@@ -1,22 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../../components/Shared/Container";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import LoadingSpinner from "../../components/Shared/LoadingSpinner";
+import SkeletonLoader from "../../components/Shared/SkeletonLoader";
 import Card from "../../components/Home/Card";
-import { cardUp } from "../../components/CardAnimation/CardAnimation";
 import { motion } from "framer-motion";
+import { cardUp } from "../../components/CardAnimation/CardAnimation";
 
 const Meals = () => {
-  const [sortOrder, setSortOrder] = useState("none");
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [rawQuery, setRawQuery] = useState("");
+  const [filterRating, setFilterRating] = useState("all");
+  const [filterPriceRange, setFilterPriceRange] = useState("all");
+  const [sortOrder, setSortOrder] = useState("none");
+
+  // debounce raw input before applying to the query key
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchQuery(rawQuery.trim());
+    }, 400);
+
+    return () => clearTimeout(handler);
+  }, [rawQuery]);
+
   const { data = {}, isLoading } = useQuery({
-    queryKey: ["meals", page],
+    queryKey: [
+      "meals",
+      page,
+      searchQuery,
+      filterRating,
+      filterPriceRange,
+      sortOrder,
+    ],
     queryFn: async () => {
-      const result = await axios(
-        `${import.meta.env.VITE_API_URL}/meals?page=${page}`
-      );
-      return result.data;
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/meals`, {
+        params: {
+          page,
+          search: searchQuery,
+          rating: filterRating,
+          price: filterPriceRange,
+          sort: sortOrder,
+        },
+      });
+      console.log("Backend response:", res.data);
+      return res.data;
     },
     keepPreviousData: true,
   });
@@ -24,99 +52,121 @@ const Meals = () => {
   const meals = data.meals || [];
   const totalPages = data.totalPages || 1;
 
-  console.log(meals);
-  if (isLoading) return <LoadingSpinner />;
+  console.log({ page, searchQuery, filterRating, filterPriceRange, sortOrder });
 
-  const sortedItem = () => {
-    if (sortOrder === "price-asc") {
-      return [...meals].sort((a, b) => a.price - b.price);
-    } else if (sortOrder === "price-dsc") {
-      return [...meals].sort((a, b) => b.price - a.price);
-    } else {
-      return meals;
-    }
-  };
   return (
     <Container>
-      <div className="mt-30">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-semibold text-red-600">
-            The Meals Board
-          </h2>
-          <p className="text-xl text-gray-500 my-4">
-            Quick access to your next favorite dish. View all chef-recommended
-            specials and order today.
-          </p>
-        </motion.div>
+      <div className="mt-24">
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search meals or chefs..."
+          value={rawQuery}
+          onChange={(e) => {
+            setRawQuery(e.target.value);
+            setPage(1);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              setSearchQuery(rawQuery.trim());
+            }
+          }}
+          className="w-full max-w-xl mx-auto block px-4 py-3 border rounded-lg"
+        />
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 mt-6">
-          <span className="font-semibold text-2xl text-red-600">Sorting :</span>
-
-          <label className="form-control w-full max-w-xs">
-            <select
-              className="select select-bordered text-gray-500 border-black"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-            >
-              <option value="none">Sort by price</option>
-              <option value="price-asc">Low-to-High</option>
-              <option value="price-dsc">High-to-Low</option>
-            </select>
-          </label>
+        {/* Visible feedback for debugging / UX */}
+        <div className="text-center text-sm text-gray-600 mt-4">
+          {searchQuery ? (
+            <span>
+              Showing <strong>{meals.length}</strong> results for "{searchQuery}
+              "
+            </span>
+          ) : (
+            <span>Showing popular meals</span>
+          )}
         </div>
 
-        {sortedItem().length > 0 && (
-          <div
-            key={sortOrder}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-10"
+        {/* Filters */}
+        <div className="flex flex-wrap gap-4 justify-center mt-6">
+          <select
+            onChange={(e) => setFilterRating(e.target.value)}
+            className="select select-bordered"
           >
-            {sortedItem().map((meal) => (
+            <option value="all">Rating</option>
+            <option value="4.5">4.5+</option>
+            <option value="4.0">4.0+</option>
+            <option value="3.5">3.5+</option>
+          </select>
+
+          <select
+            onChange={(e) => setFilterPriceRange(e.target.value)}
+            className="select select-bordered"
+          >
+            <option value="all">Price</option>
+            <option value="low">Under $20</option>
+            <option value="medium">$20 - $50</option>
+            <option value="high">Above $50</option>
+          </select>
+
+          <select
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="select select-bordered"
+          >
+            <option value="none">Sort</option>
+            <option value="price-asc">Price Low → High</option>
+            <option value="price-dsc">Price High → Low</option>
+            <option value="rating-dsc">Rating High → Low</option>
+          </select>
+        </div>
+
+        {/* Cards */}
+        {isLoading ? (
+          <div className="grid grid-cols-4 gap-6 mt-10">
+            {[...Array(8)].map((_, i) => (
+              <SkeletonLoader key={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-10">
+            {meals.map((meal) => (
               <motion.div
                 key={meal._id}
                 variants={cardUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
               >
                 <Card meal={meal} />
               </motion.div>
             ))}
           </div>
         )}
-      </div>
 
-      <div className="flex justify-center gap-2 mt-10 mb-10">
-        <button
-          className="btn btn-sm"
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
-        >
-          Prev
-        </button>
-
-        {[...Array(totalPages).keys()].map((num) => (
+        {/* Pagination */}
+        <div className="flex justify-center gap-2 mt-10">
           <button
-            key={num}
-            onClick={() => setPage(num + 1)}
-            className={`btn btn-sm ${page === num + 1 ? "btn-primary" : ""}`}
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+            className="btn"
           >
-            {num + 1}
+            Prev
           </button>
-        ))}
-
-        <button
-          className="btn btn-sm"
-          disabled={page === totalPages}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
+          {[...Array(totalPages).keys()].map((i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`btn ${page === i + 1 && "btn-primary"}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage(page + 1)}
+            className="btn"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </Container>
   );

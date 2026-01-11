@@ -1,79 +1,54 @@
 import { Link } from "react-router";
 
 const Card = ({ meal }) => {
-  console.log(meal);
   return (
-    <div className="w-full sm:w-64 max-w-sm mx-auto p-2 bg-white rounded-xl shadow-lg hover:shadow-amber-500/50 transition-all duration-300 transform hover:-translate-y-1">
-      <div className="col-span-1 cursor-pointer group rounded-xl block">
-        <div className="flex flex-col gap-3 w-full p-2">
-          <div
-            className="
-          aspect-square
-          w-full
-          relative
-          overflow-hidden
-          rounded-lg
-          shadow-md
-        "
-          >
-            <img
-              className="
-            object-cover
-            h-full
-            w-full
-            group-hover:scale-105
-            transition-transform duration-500
-          "
-              src={meal.foodImage}
-              alt="Food Image"
-            />
-            <div
-              className="
-            absolute
-            top-2
-            right-2
-            bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full
-          "
-            >
-              HOT
-            </div>
-          </div>
+    <div className="bg-white  rounded-3xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-none transition-transform hover:-translate-y-2">
+      {/* Image */}
+      <div className="relative mb-6 flex justify-center">
+        <img
+          src={meal.foodImage}
+          alt={meal.foodName}
+          className="w-48 h-48 object-cover rounded-full shadow-2xl"
+        />
 
-          <div className="flex flex-col gap-1">
-            <div className="font-extrabold text-xl text-gray-800 truncate">
-              {meal.foodName}
-            </div>
+        {/* HOT Badge */}
+        <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+          HOT
+        </div>
+      </div>
 
-            <div className="text-sm text-gray-500 truncate">
-              By: {meal.chefName}
-            </div>
-            <div className="text-sm text-gray-500 truncate">
-              id :{meal.chefId}
-            </div>
+      {/* Content */}
+      <div className="text-center flex flex-col h-full">
+        {/* Food Name */}
+        <h3 className="text-xl font-bold mb-1 text-gray-900 dark:text-white">
+          {meal.foodName}
+        </h3>
 
-            <div className="flex items-center justify-between mt-1">
-              <div className="flex items-center text-sm text-yellow-500">
-                <span className="mr-1">⭐</span>
-                <span className="font-semibold text-gray-700">
-                  {meal.rating}
-                </span>
-              </div>
+        {/* Chef */}
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+          By: {meal.chefName} (ID: {meal.chefId})
+        </p>
 
-              <div className="font-bold text-xl text-red-600">
-                {meal.price}$
-              </div>
-            </div>
-          </div>
+        {/* Rating */}
+        <div className="flex justify-center gap-1 mb-4 text-yellow-500">
+          {[...Array(5)].map((_, i) => (
+            <span key={i}>{i < Math.round(meal.rating) ? "★" : "☆"}</span>
+          ))}
+          <span className="ml-2 text-sm text-gray-600 dark:text-gray-300">
+            {meal.rating}
+          </span>
+        </div>
+
+        {/* Price & Button */}
+        <div className="flex items-center justify-between mt-auto">
+          <span className="text-2xl font-extrabold text-gray-900 dark:text-white">
+            ${meal.price}
+          </span>
 
           <Link
             to={`/meal/${meal._id}`}
-            className="
-          w-full 
-          bg-red-600 text-white font-semibold py-2 rounded-lg 
-          hover:bg-red-700 active:bg-red-800 
-          transition-colors duration-200
-          mt-2 btn
-        "
+            className="px-4 py-2 font-bold rounded-xl text-sm transition-all
+            border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
           >
             See Details
           </Link>

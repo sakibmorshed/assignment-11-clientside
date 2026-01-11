@@ -21,7 +21,7 @@ export default function HeroCarousel() {
   }, []);
 
   return (
-    <section className="relative h-screen overflow-hidden">
+    <section className="relative h-[70vh] md:h-[80vh] lg:h-[98vh] overflow-hidden">
       <div className="absolute inset-0">
         {images.map((src, index) => (
           <motion.div

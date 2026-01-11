@@ -3,13 +3,17 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import useAuth from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
+
 import { TbFidgetSpinner } from "react-icons/tb";
 import { useForm } from "react-hook-form";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase/firebase.config";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const { signIn, loading, user } = useAuth();
@@ -21,7 +25,6 @@ const Login = () => {
   if (loading) return <LoadingSpinner />;
   if (user) return <Navigate to={from} replace={true} />;
 
-  // form submit handler
   const handleLogin = async (data) => {
     try {
       await signIn(data.email, data.password);
@@ -30,6 +33,36 @@ const Login = () => {
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
+    }
+  };
+
+  const handleDemoLogin = () => {
+    setValue("email", "demo@localchef.com");
+    setValue("password", "Demo@123");
+
+    toast.success("Demo credentials filled! Click 'Continue' to login.", {
+      duration: 3000,
+    });
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      toast.success("Google Login Successful");
+      navigate(from, { replace: true });
+    } catch (err) {
+      console.log(err);
+      if (err.code === "auth/operation-not-allowed") {
+        toast.error(
+          "Google sign-in is not enabled. Please enable it in Firebase Console > Authentication > Sign-in method",
+          { duration: 5000 }
+        );
+      } else if (err.code === "auth/popup-closed-by-user") {
+        toast.info("Login popup was closed");
+      } else {
+        toast.error(err?.message || "Google login failed. Please try again.");
+      }
     }
   };
 
@@ -109,7 +142,7 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="bg-lime-500 w-full rounded-md py-3 text-white"
+              className="bg-lime-500 w-full rounded-md py-3 text-white hover:bg-lime-600 transition"
             >
               {loading ? (
                 <TbFidgetSpinner className="animate-spin m-auto" />
@@ -119,17 +152,52 @@ const Login = () => {
             </button>
           </div>
         </form>
+
+        {/* Demo Login Button */}
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            className="w-full bg-blue-500 text-white rounded-md py-3 hover:bg-blue-600 transition font-medium"
+          >
+            Fill Demo Credentials
+          </button>
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            Note: Create a demo account first or use your own credentials
+          </p>
+        </div>
+
         <div className="space-y-1">
           <button className="text-xs hover:underline hover:text-lime-500 text-gray-400 cursor-pointer">
             Forgot password?
           </button>
         </div>
+
         <div className="flex items-center pt-4 space-x-1">
-          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-          <p className="px-3 text-sm dark:text-gray-400">
-            Login with social accounts
+          <div className="flex-1 h-px sm:w-16 bg-gray-300 dark:bg-gray-700"></div>
+          <p className="px-3 text-sm text-gray-500 dark:text-gray-400">
+            Login with social account
           </p>
-          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
+          <div className="flex-1 h-px sm:w-16 bg-gray-300 dark:bg-gray-700"></div>
+        </div>
+
+        {/* Social Login Buttons */}
+        <div className="flex flex-col gap-3 pt-4">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 dark:border-gray-600 rounded-md py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+          >
+            <FcGoogle className="w-5 h-5" />
+            <span className="font-medium text-gray-700 dark:text-gray-300">
+              Continue with Google
+            </span>
+          </button>
+
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Social login requires Firebase Console setup. See instructions
+            below.
+          </p>
         </div>
 
         <p className="px-6 text-sm text-center text-gray-400">

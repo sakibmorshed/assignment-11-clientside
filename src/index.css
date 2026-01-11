@@ -10,3 +10,13 @@ body {
   font-style: italic;
   font-variation-settings: "width" 100;
 }
+
+/* Dark mode support */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #1a1a1a;
+  color: #e5e5e5;
+}

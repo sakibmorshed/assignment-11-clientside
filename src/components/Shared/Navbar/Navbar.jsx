@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Moon, Sun, ChevronDown } from "lucide-react";
 import { Link } from "react-router";
 import useAuth from "../../../hooks/useAuth";
+import useTheme from "../../../hooks/useTheme";
 import logo from "../../../../public/logo-main.webp";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const { user, logOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +19,17 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuOpen && !event.target.closest(".profile-menu-container")) {
+        setProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [profileMenuOpen]);
 
   return (
     <header
@@ -46,35 +60,86 @@ export default function Navbar() {
             >
               Meals
             </Link>
-
+            <Link
+              to="/about"
+              className="text-white hover:text-red-400 transition flex items-center"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              className="text-white hover:text-red-400 transition flex items-center"
+            >
+              Contact
+            </Link>
             {user && (
-              <Link
-                to="/dashboard"
-                className="text-white hover:text-red-400 transition flex items-center"
-              >
-                Dashboard
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-white hover:text-red-400 transition flex items-center"
+                >
+                  Dashboard
+                </Link>
+              </>
             )}
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-white hover:bg-white/20 rounded-full transition"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
             {user ? (
               <>
-                <div
-                  onClick={logOut}
-                  className="px-8 py-3 bg-red-600 text-white rounded-full hover:bg-red-800 transition font-semibold shadow-lg cursor-pointer"
-                >
-                  Logout
-                </div>
-                <div>
-                  <img
-                    className="rounded-full"
-                    referrerPolicy="no-referrer"
-                    src={user && user.photoURL ? user.photoURL : logo}
-                    alt="profile"
-                    height="30"
-                    width="30"
-                  />
+                <div className="relative profile-menu-container">
+                  <button
+                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                    className="flex items-center space-x-2 p-2 hover:bg-white/20 rounded-full transition"
+                  >
+                    <img
+                      className="rounded-full"
+                      referrerPolicy="no-referrer"
+                      src={user && user.photoURL ? user.photoURL : logo}
+                      alt="profile"
+                      height="32"
+                      width="32"
+                    />
+                    <ChevronDown size={16} className="text-white" />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {profileMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 border border-gray-200 dark:border-gray-700">
+                      <Link
+                        to="/dashboard/profile"
+                        onClick={() => setProfileMenuOpen(false)}
+                        className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      >
+                        Profile
+                      </Link>
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setProfileMenuOpen(false)}
+                        className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      >
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logOut();
+                          setProfileMenuOpen(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
@@ -108,26 +173,74 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-black/95 backdrop-blur-lg">
           <div className="px-6 py-8 space-y-6 text-center">
-            <Link to="/" className="block text-white text-xl">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-white text-xl"
+            >
               Home
             </Link>
-            <Link to="/meals" className="block text-white text-xl">
+            <Link
+              to="/meals"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-white text-xl"
+            >
               Meals
             </Link>
-            <Link to="/dashboard" className="block text-white text-xl">
-              Dashboard
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-white text-xl"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-white text-xl"
+            >
+              Contact
             </Link>
             {user ? (
-              <Link onClick={logOut} className="block text-white text-xl">
-                Logout
-              </Link>
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-white text-xl"
+                >
+                  Dashboard
+                </Link>
+
+                <button
+                  onClick={() => {
+                    logOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-white text-xl"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
-              <Link to="/signup" className="block text-white text-xl">
-                Signup
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-white text-xl"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-white text-xl"
+                >
+                  Signup
+                </Link>
+              </>
             )}
 
-            <Link to="/meals">
+            <Link to="/meals" onClick={() => setMobileMenuOpen(false)}>
               <button className="w-full py-3 border border-white text-white rounded-full">
                 Book a Meal
               </button>
