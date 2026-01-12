@@ -133,7 +133,7 @@ const Meals = () => {
                 key={meal._id}
                 variants={cardUp}
                 initial="hidden"
-                whileInView="visible"
+                animate="visible"
               >
                 <Card meal={meal} />
               </motion.div>

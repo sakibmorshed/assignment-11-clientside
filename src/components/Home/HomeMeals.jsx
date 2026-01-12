@@ -46,11 +46,7 @@ const HomeMeals = () => {
                 key={meal._id}
                 variants={cardUp}
                 initial="hidden"
-                whileInView="visible"
-                viewport={{
-                  once: true,
-                  margin: "-80px",
-                }}
+                animate="visible"
               >
                 <Card meal={meal} />
               </motion.div>
