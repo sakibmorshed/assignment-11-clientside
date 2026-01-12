@@ -2,13 +2,13 @@ import { Link } from "react-router";
 
 const Card = ({ meal }) => {
   return (
-    <div className="bg-white  rounded-3xl p-6 shadow-xl shadow-gray-200/50 dark:shadow-none transition-transform hover:-translate-y-2">
+    <div className="bg-white  rounded-3xl p-4 sm:p-6 shadow-xl shadow-gray-200/50 dark:shadow-none transition-transform hover:-translate-y-2 w-full">
       {/* Image */}
       <div className="relative mb-6 flex justify-center">
         <img
           src={meal.foodImage}
           alt={meal.foodName}
-          className="w-48 h-48 object-cover rounded-full shadow-2xl"
+          className="w-40 h-40 sm:w-48 sm:h-48 object-cover rounded-full shadow-2xl"
         />
 
         {/* HOT Badge */}
