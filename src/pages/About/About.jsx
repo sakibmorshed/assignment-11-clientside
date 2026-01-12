@@ -15,7 +15,7 @@ const About = () => {
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
             About LocalChef
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-white max-w-3xl mx-auto">
             Connecting food lovers with talented local chefs in your community
           </p>
         </motion.div>
@@ -30,13 +30,13 @@ const About = () => {
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               Our Mission
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-white leading-relaxed">
               LocalChef was born from a simple idea: everyone deserves access to
               amazing, home-cooked meals made by passionate local chefs. We
               believe in supporting local culinary talent while bringing
               convenience and quality to your dining experience.
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-lg text-gray-600 dark:text-white leading-relaxed">
               Whether you're a busy professional, a food enthusiast, or someone
               who loves supporting local businesses, LocalChef brings the
               restaurant experience to your home.
@@ -52,7 +52,7 @@ const About = () => {
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               What We Offer
             </h2>
-            <ul className="space-y-3 text-lg text-gray-600 dark:text-gray-400">
+            <ul className="space-y-3 text-lg text-gray-600 dark:text-white">
               <li className="flex items-start">
                 <ChefHat className="w-6 h-6 text-red-600 dark:text-red-400 mr-3 mt-1" />
                 <span>Access to talented local chefs in your area</span>
@@ -82,7 +82,7 @@ const About = () => {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Join Our Community
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
+          <p className="text-lg text-gray-600 dark:text-white mb-6">
             Whether you're a chef looking to share your passion or a food lover
             seeking amazing meals, LocalChef is the place for you.
           </p>

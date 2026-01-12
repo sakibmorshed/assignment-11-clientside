@@ -29,7 +29,7 @@ const Contact = () => {
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Get in Touch
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">
+          <p className="text-xl text-gray-600 dark:text-white">
             We'd love to hear from you
           </p>
         </motion.div>
@@ -45,7 +45,7 @@ const Contact = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
                 Contact Information
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+              <p className="text-lg text-gray-600 dark:text-white mb-8">
                 Reach out to us through any of these channels. We're here to
                 help!
               </p>
@@ -60,7 +60,7 @@ const Contact = () => {
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                     Email
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-gray-600 dark:text-white">
                     hello@localchef.com
                   </p>
                 </div>
@@ -74,7 +74,7 @@ const Contact = () => {
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                     Phone
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-gray-600 dark:text-white">
                     +1 234 567 890
                   </p>
                 </div>
@@ -88,7 +88,7 @@ const Contact = () => {
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                     Address
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-gray-600 dark:text-white">
                     3 E 19th St, Dhaka, NY 10160, Bangladesh
                   </p>
                 </div>
@@ -106,7 +106,7 @@ const Contact = () => {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 space-y-6"
             >
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Name
                 </label>
                 <input
@@ -121,7 +121,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Email
                 </label>
                 <input
@@ -136,7 +136,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2">
                   Message
                 </label>
                 <textarea

@@ -20,7 +20,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (profileMenuOpen && !event.target.closest(".profile-menu-container")) {
@@ -33,7 +32,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500  ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled ? "bg-black/50 backdrop-blur-md" : "bg-black/50"
       }`}
     >
@@ -73,18 +72,16 @@ export default function Navbar() {
               Contact
             </Link>
             {user && (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="text-white hover:text-red-400 transition flex items-center"
-                >
-                  Dashboard
-                </Link>
-              </>
+              <Link
+                to="/dashboard"
+                className="text-white hover:text-red-400 transition flex items-center"
+              >
+                Dashboard
+              </Link>
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
@@ -95,53 +92,50 @@ export default function Navbar() {
             </button>
 
             {user ? (
-              <>
-                <div className="relative profile-menu-container">
-                  <button
-                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                    className="flex items-center space-x-2 p-2 hover:bg-white/20 rounded-full transition"
-                  >
-                    <img
-                      className="rounded-full"
-                      referrerPolicy="no-referrer"
-                      src={user && user.photoURL ? user.photoURL : logo}
-                      alt="profile"
-                      height="32"
-                      width="32"
-                    />
-                    <ChevronDown size={16} className="text-white" />
-                  </button>
+              <div className="relative profile-menu-container">
+                <button
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                  className="flex items-center space-x-2 p-2 hover:bg-white/20 rounded-full transition"
+                >
+                  <img
+                    className="rounded-full"
+                    referrerPolicy="no-referrer"
+                    src={user && user.photoURL ? user.photoURL : logo}
+                    alt="profile"
+                    height="32"
+                    width="32"
+                  />
+                  <ChevronDown size={16} className="text-white" />
+                </button>
 
-                  {/* Dropdown Menu */}
-                  {profileMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 border border-gray-200 dark:border-gray-700">
-                      <Link
-                        to="/dashboard/profile"
-                        onClick={() => setProfileMenuOpen(false)}
-                        className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      >
-                        Profile
-                      </Link>
-                      <Link
-                        to="/dashboard"
-                        onClick={() => setProfileMenuOpen(false)}
-                        className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      >
-                        Dashboard
-                      </Link>
-                      <button
-                        onClick={() => {
-                          logOut();
-                          setProfileMenuOpen(false);
-                        }}
-                        className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
+                {profileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 border border-gray-200 dark:border-gray-700">
+                    <Link
+                      to="/dashboard/profile"
+                      onClick={() => setProfileMenuOpen(false)}
+                      className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setProfileMenuOpen(false)}
+                      className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logOut();
+                        setProfileMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link
@@ -160,6 +154,17 @@ export default function Navbar() {
             )}
           </div>
         </div>
+
+        {/* Mobile Theme Toggle */}
+        <div className="md:hidden mr-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-white hover:bg-white/20 rounded-full transition"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
+
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -201,6 +206,7 @@ export default function Navbar() {
             >
               Contact
             </Link>
+
             {user ? (
               <>
                 <Link
@@ -210,7 +216,6 @@ export default function Navbar() {
                 >
                   Dashboard
                 </Link>
-
                 <button
                   onClick={() => {
                     logOut();

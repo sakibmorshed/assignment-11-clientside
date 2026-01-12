@@ -1,28 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const useTheme = () => {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme || "light";
-  });
+export default function useTheme() {
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "light" // 👈 default light
+  );
 
   useEffect(() => {
-    const root = document.documentElement;
+    const root = window.document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
-      root.setAttribute("data-theme", "dark");
     } else {
       root.classList.remove("dark");
-      root.setAttribute("data-theme", "light");
     }
     localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   return { theme, toggleTheme };
-};
-
-export default useTheme;
+}
