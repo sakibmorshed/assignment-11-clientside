@@ -3,6 +3,8 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
@@ -11,7 +13,6 @@ body {
   font-variation-settings: "width" 100;
 }
 
-/* Dark mode support */
 .dark {
   color-scheme: dark;
 }
@@ -19,4 +20,9 @@ body {
 .dark body {
   background-color: #1a1a1a;
   color: #e5e5e5;
+}
+
+.dark {
+  --tw-bg-opacity: 1;
+  background-color: rgb(26 26 26 / var(--tw-bg-opacity));
 }

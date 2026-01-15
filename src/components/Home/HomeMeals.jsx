@@ -36,7 +36,7 @@ const HomeMeals = () => {
         </p>
       </motion.div>
 
-      <div className="pt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-7 gap-y-8 sm:gap-y-10">
+      <div className="pt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 xl:gap-7 gap-y-6 sm:gap-y-8 md:gap-y-10">
         {isLoading
           ? Array.from({ length: 8 }).map((_, index) => (
               <SkeletonLoader key={index} />

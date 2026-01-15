@@ -57,7 +57,6 @@ const Meals = () => {
   return (
     <Container>
       <div className="mt-24">
-        {/* Search */}
         <input
           type="text"
           placeholder="Search meals or chefs..."
@@ -74,7 +73,6 @@ const Meals = () => {
           className="w-full max-w-xl mx-auto block px-4 py-3 border rounded-lg"
         />
 
-        {/* Visible feedback for debugging / UX */}
         <div className="text-center text-sm text-gray-600 mt-4">
           {searchQuery ? (
             <span>
@@ -86,7 +84,6 @@ const Meals = () => {
           )}
         </div>
 
-        {/* Filters */}
         <div className="flex flex-wrap gap-4 justify-center mt-6">
           <select
             onChange={(e) => setFilterRating(e.target.value)}
@@ -119,7 +116,6 @@ const Meals = () => {
           </select>
         </div>
 
-        {/* Cards */}
         {isLoading ? (
           <div className="grid grid-cols-4 gap-6 mt-10">
             {[...Array(8)].map((_, i) => (
@@ -141,7 +137,6 @@ const Meals = () => {
           </div>
         )}
 
-        {/* Pagination */}
         <div className="flex justify-center gap-2 mt-10">
           <button
             disabled={page === 1}
